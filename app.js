@@ -24,6 +24,8 @@ app.post("/newitem" , (req,res)=>{
     res.redirect("/")
 });
 
-app.listen("3000",()=>{
+port = process.env.port || 3000
+
+app.listen(port,()=>{
     console.log("server hosted......")
 });
