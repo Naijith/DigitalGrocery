@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
-
+const port = process.env.PORT || 3000
 app.set("view engine" , "ejs");
 app.use(bodyparser.urlencoded({extended : true}));
 
@@ -22,8 +22,6 @@ app.post("/newitem" , (req,res)=>{
     groceryList.push(item);
     res.redirect("/")
 });
-
-var port = process.env.PORT
 
 app.listen(port,()=>{
     console.log("server hosted......")
