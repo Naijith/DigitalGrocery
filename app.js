@@ -6,7 +6,6 @@ app.set("view engine" , "ejs");
 app.use(bodyparser.urlencoded({extended : true}));
 
 var groceryList = []
-
 app.get("/groceryList",(req,res)=>{
     console.log("printing list");
     res.render("groceryList.ejs", {groceryList:groceryList});
@@ -24,7 +23,7 @@ app.post("/newitem" , (req,res)=>{
     res.redirect("/")
 });
 
-port = process.env.port || 3000
+port = process.env.PORT || 3000
 
 app.listen(port,()=>{
     console.log("server hosted......")
