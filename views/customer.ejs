@@ -1,12 +1,204 @@
-<html>
-    <head></head>
-    <title>Digital Grocery</title>
-    <body>
-        <div class="form-group" >
-            <form method="post" action="/newitem" >
-                <textarea name="item" rows="10" cols="30"></textarea>
-                <input type="submit" >
-            </form>
+<!DOCTYPE html>
+<html >
+<head>
+  <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+
+<body>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" style="border: 1px solid white;border-radius: 8px;padding: 10px;" href="#">Digital Grocery</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Customer Lists</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input id="filter_text" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" oninput="filter_menu()">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="filter_menu()">Search</button>
+        <button onclick="window.location.href='./admin'" class="btn btn-outline-primary my-2 my-sm-0 ml-2" type="button">login</button>
+      </form>
+    </div>
+  </nav>
+  <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">© 2020 Copyright: Digital Grocery</a>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    </div>
+  </nav>
+  
+<div style="height:100%;display: flex; padding-top: 68px;padding-bottom: 56px;">
+<div id="menu" class="m-0 pr-1 pb-1">
+<div class="row border-0 m-0">
+<% for(var i=0;i<items.length;i++){
+    var url = items[i].name.replace(" ","%20") + items[i].imageType; %>
+	<div id="<%= items[i].name %>" class="card border-0 rounded-0 pl-1 pt-1" style="width: 25%;height: 17rem;">
+        <div class="card-header border-0 rounded-0" style="background-color: #8080806b;">
+          <p class="m-0"><%= items[i].name %></p>
+          <div id="<%=items[i].name+'_price'%>" style="position: absolute;top: .75rem;right: 3rem;">
+            &#x20B9;<%=items[i].price%>
+          </div>
         </div>
-    </body>
+		<div class="card border-0 rounded-0 justify-content-between align-items-center" style="background-image: url(<%=url%>);background-repeat: no-repeat;background-position: center;background-size: cover;height: 100%">
+            <a onclick="add_btn('<%=items[i].name%>','<%=items[i].quantityType%>')" class="btn btn-primary" style="position: absolute; bottom: 15px;">add item</a>
+            
+            <button type="button" id='add_new_item_btn' class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" hidden>
+            Launch demo modal
+            </button>
+              
+            <!-- Modal -->
+            <div class="modal fade" style="transition: opacity 0s linear;" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body d-flex justify-content-center text-center">
+                    <input type='number' id='new_item' value="1"><div id="quantity_type" style="font-size: x-large;"></div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="add_item()" data-dismiss="modal" aria-label="Close" >ADD</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+		</div>
+  </div>
+<% } %>
+</div>
+</div>
+
+<div id="cart" style="width:35%;height:100%;">
+  <div id="list_header" class="list-header" style="background: gainsboro; top:71px;">
+    CART
+  </div>
+  <div id="list" style="margin: 5px;height: 64%;overflow-y: scroll;max-height: 600px;">
+    <ul class="list-group" style="height: 100%;">
+        <div id="cart_items" style="height: 100%;">
+        </div>
+      </ul>
+  </div>
+  <button type="button" class="list-header" style="background: #2ebc4f; bottom:71px;" onclick="clear_list()" >submit</button>
+  </div>
+</div>
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    var list=[];
+    var current = null;
+
+    function add_item(){
+        const value = current;
+        var quantity_element = document.getElementById("new_item");
+        var quantity = quantity_element.value ;
+        var price = document.getElementById(current+"_price");
+        var cost = parseFloat(price.innerHTML) * quantity ;
+
+        list.push({name:current, quantity:quantity , cost:cost});
+
+        update_cart({name:current,quantity:quantity ,cost:cost});
+
+        quantity_element.value="1";
+
+    }
+
+    function update_cart(cart){
+        var cart_items = document.getElementById("cart_items");
+
+        var li = document.createElement("li");
+        li.className = "list-group-item d-flex align-items-center";
+        li.id = cart.name+"_inlist";
+
+        var name = document.createElement("div");
+        name.id = cart.name + "_name";
+        name.innerHTML = cart.name;
+
+        var quantity = document.createElement("div");
+        quantity.className="badge badge-primary badge-pill";
+        quantity.id = cart.name + "_quantity";
+        quantity.innerHTML=cart.quantity;
+        quantity.style.margin="2px";
+        quantity.style.marginLeft="auto";
+
+        var cost = document.createElement("div");
+        cost.className="badge badge-success badge-pill";
+        cost.id = cart.name + "_cost";
+        cost.innerHTML="&#x20B9;"+cart.cost;
+        cost.style.margin="2px"
+        
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "close";
+        button.setAttribute("aria-label", "Close");
+        button.setAttribute('onclick','delete_item("'+cart.name+'")');
+
+        var span = document.createElement("span");
+        span.setAttribute("aria-hidden","true");
+        span.innerHTML="&times;";
+
+        button.appendChild(span);
+
+        li.appendChild(name);
+        li.appendChild(quantity);
+        li.appendChild(cost);
+        li.appendChild(button);
+
+        cart_items.appendChild(li);
+    }
+
+    function delete_item(item_name){
+        var li = document.getElementById(item_name+"_inlist");
+        li.remove();
+        for(var j=0;list.length;j++){
+            if(list[j].name == item_name){
+              list.splice(j,1);
+              break;
+            }
+        }
+        
+    }
+
+    function add_btn(name,quantityType){
+        const btn = document.getElementById('add_new_item_btn');
+
+        var quantity_type = document.getElementById("quantity_type");
+        quantity_type.innerHTML="."+quantityType;
+
+        btn.click();
+        current = name;
+    }
+
+    function filter_menu(){
+      var filter_text = document.getElementById("filter_text").value;
+
+      var cards = document.getElementById('menu').getElementsByClassName('card');
+      for( i=0; i< cards.length; i+=2)
+      {
+          if(cards[i].id.includes(filter_text)){
+            cards[i].style.display='flex';
+          }
+          else{
+            cards[i].style.display='none';
+          }
+      }
+    }
+
+</script>
+
 </html>

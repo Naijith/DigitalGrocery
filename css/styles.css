@@ -1,0 +1,39 @@
+html,body{
+    height: 100%;
+    overflow: hidden;
+}
+
+p{
+    text-decoration: overline;
+    font-variant-caps: petite-caps;
+    padding-right: 3.5rem;
+}
+
+#menu{
+    width: 100%;
+    height:100%;
+    overflow-y: scroll;
+}
+
+.list-header{
+    border: 1px solid gainsboro;
+    border-radius: 3px;
+    width: 97%;
+    margin: 5px;
+    height: 48px;
+    font-size: 21px;
+    font-variant-caps: all-petite-caps;
+    text-align: center;
+}
+
+#delete_icon{
+    font-size: 24px;
+    position: absolute;
+    right: 15px;
+    top: .75rem;
+    color: grey;
+    text-decoration: none;
+}
+#delete_icon:hover{
+    color:red;
+}
