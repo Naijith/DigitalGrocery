@@ -15,15 +15,76 @@ p{
     overflow-y: scroll;
 }
 
-.list-header{
-    border: 1px solid gainsboro;
-    border-radius: 3px;
-    width: 97%;
-    margin: 5px;
+#menu::-webkit-scrollbar {
+    display: none;
+}
+
+#list-header{
+    background: #febd69;
+    width: 96%;
+    max-width: 400px;
     height: 48px;
-    font-size: 21px;
+    margin: 5px 5px 0px 5px;
+    text-align: center;
+    font-size: 17px;
     font-variant-caps: all-petite-caps;
     text-align: center;
+    top:71px;
+}
+
+#cart-nothing{
+    margin: 0px 5px;
+    height: 64%;
+    width: 96%;
+    max-height: 600px;
+    max-width: 400px;
+    border:3px dashed #6161613d;
+    border-top: 0px;
+    text-align: center;
+    background-color: #6161613d;
+    font-size:25px;
+    font-variant-caps: all-petite-caps;
+    overflow: hidden;
+}
+
+#list{
+    margin: 0px 5px;
+    width: 96%;
+    overflow-y: scroll;
+    min-height: 50px;
+    max-height: 64%;
+    max-width: 400px;
+    display:none;
+}
+
+#list::-webkit-scrollbar {
+    display: none;
+  }
+
+#list-total{
+    background-color:#d3d3d361;
+    border: 1px solid grey;
+    border-radius:0px 0px 5px 5px;
+    width: 96%;
+    max-width: 400px;
+    margin: 0px 5px 5px 5px;
+    font-size: 16px;
+    display:none;
+    text-align: center;
+}
+
+#list-submit{
+    background: #fb641b;
+    border-radius:4px;
+    width: 96%;
+    max-width: 400px;
+    height: 35px;
+    margin:auto;
+    padding-top:5px;
+    text-align: center;
+    font-size: 16px;
+    font-variant-caps: all-petite-caps;
+    display: none;
 }
 
 #delete_icon{

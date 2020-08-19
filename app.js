@@ -77,9 +77,8 @@ app.post("/add_item" , (req,res)=>{
           console.log(err);
         }
     })
-    });
-
-    res.redirect("/admin");   
+    res.redirect("/admin"); 
+    });   
 });
 
 app.get("/delete_item/:name/:imageType" ,(req,res)=>{
@@ -106,6 +105,6 @@ app.post("/submit_list" , (req,res)=>{
     res.redirect("/")
 });
 
-app.listen("3000",()=>{
+app.listen("2020",()=>{
     console.log("server hosted......")
 });

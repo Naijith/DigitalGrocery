@@ -4,6 +4,8 @@
   <title></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
   </head>
 
 <body>
@@ -41,9 +43,9 @@
     var url = items[i].name.replace(" ","%20") + items[i].imageType; %>
 	<div id="<%= items[i].name %>" class="card border-0 rounded-0 pl-1 pt-1" style="width: 25%;height: 17rem;">
         <div class="card-header border-0 rounded-0" style="background-color: #8080806b;">
-          <p class="m-0"><%= items[i].name %></p>
-          <div id="<%=items[i].name+'_price'%>" style="position: absolute;top: .75rem;right: 3rem;">
-            &#x20B9;<%=items[i].price%>
+          <p class="m-0 pr-5"><%= items[i].name %></p>
+          <div style="position: absolute;top: .75rem;right: 1rem;">
+            &#x20B9;<span id="<%=items[i].name+'_price'%>"><%=items[i].price%></span>
           </div>
         </div>
 		<div class="card border-0 rounded-0 justify-content-between align-items-center" style="background-image: url(<%=url%>);background-repeat: no-repeat;background-position: center;background-size: cover;height: 100%">
@@ -79,17 +81,24 @@
 </div>
 </div>
 
-<div id="cart" style="width:35%;height:100%;">
-  <div id="list_header" class="list-header" style="background: gainsboro; top:71px;">
-    CART
+<div id="cart border-0 rounded-0" style="width:35%;height:100%;">
+  <div id="list-header" class="card-header border-0 rounded-0">
+    cart <span class="fa fa-shopping-cart" style="font-size: 13px;"></span>
   </div>
-  <div id="list" style="margin: 5px;height: 64%;overflow-y: scroll;max-height: 600px;">
-    <ul class="list-group" style="height: 100%;">
+  <div id="cart-nothing" class="d-flex align-items-center justify-content-center">Nothing in cart.</div>
+  <div id="list">
+    <ul class="list-group border-0 rounded-0" style="height: 100%;">
         <div id="cart_items" style="height: 100%;">
         </div>
       </ul>
   </div>
-  <button type="button" class="list-header" style="background: #2ebc4f; bottom:71px;" onclick="clear_list()" >submit</button>
+    <div id="list-total" class="card-header">
+      Subtotal( <span id="number-of-items"></span> items ) :  &#x20B9;<span id="total-price"></span>
+      <a id="list-submit" type="button" onclick="clear_list()" >
+        <span class="fa fa-arrow-circle-right" style="font-size: 12px;"></span>
+        submit
+      </a>
+    </div>
   </div>
 </div>
 
@@ -102,85 +111,136 @@
 <script>
     var list=[];
     var current = null;
+    var totalItems=0,totalPrice=0;
 
     function add_item(){
-        const value = current;
+        var value = current;
         var quantity_element = document.getElementById("new_item");
-        var quantity = quantity_element.value ;
+        var quantity = parseFloat(quantity_element.value) ;
+        var quantityType = document.getElementById("quantity_type").innerHTML;
         var price = document.getElementById(current+"_price");
         var cost = parseFloat(price.innerHTML) * quantity ;
 
-        list.push({name:current, quantity:quantity , cost:cost});
+        document.getElementById("list").style.display="block";
+        document.getElementById("list-total").style.display="block";
+        document.getElementById("list-submit").style.display="block";
+        document.getElementById("cart-nothing").className="";
+        document.getElementById("cart-nothing").style.display="none";
 
-        update_cart({name:current,quantity:quantity ,cost:cost});
+        var flag=false;
+        var index = -1;
+        for(var j=0;j<list.length;j++){
+            if(list[j].name == current){
+              flag = true;
+              index = j;
+              break;
+            }
+            else{
+              flag=false
+            }
+        }
+        if(flag==false){
+          list.push({name:current, quantity:quantity , cost:cost});
+          update_cart({name:current,quantity:quantity ,cost:cost,quantityType:quantityType});
+        }
+        else{
+          list[j].quantity = list[j].quantity + parseFloat(quantity);
+          list[j].cost = list[j].cost + cost;
+          update_cart({name:current,quantity:list[j].quantity ,cost:list[j].cost ,quantityType:quantityType});
+        }
+
+        totalPrice = totalPrice + cost;
+
+        document.getElementById("number-of-items").innerHTML=list.length;
+        document.getElementById("total-price").innerHTML=totalPrice;
 
         quantity_element.value="1";
-
     }
 
     function update_cart(cart){
         var cart_items = document.getElementById("cart_items");
+        var item = document.getElementById(cart.name+"_inlist");
+        if(item==null){
+          var li = document.createElement("li");
+          li.className = "list-group-item rounded-0 d-flex align-items-center";
+          li.id = cart.name+"_inlist";
 
-        var li = document.createElement("li");
-        li.className = "list-group-item d-flex align-items-center";
-        li.id = cart.name+"_inlist";
+          var name = document.createElement("div");
+          name.id = cart.name + "_name";
+          name.innerHTML = cart.name;
 
-        var name = document.createElement("div");
-        name.id = cart.name + "_name";
-        name.innerHTML = cart.name;
+          var quantity = document.createElement("div");
+          quantity.className="badge badge-primary badge-pill";
+          quantity.id = cart.name + "_quantity";
+          quantity.innerHTML=cart.quantity+cart.quantityType;
+          quantity.style.margin="2px";
+          quantity.style.marginLeft="auto";
 
-        var quantity = document.createElement("div");
-        quantity.className="badge badge-primary badge-pill";
-        quantity.id = cart.name + "_quantity";
-        quantity.innerHTML=cart.quantity;
-        quantity.style.margin="2px";
-        quantity.style.marginLeft="auto";
+          var cost = document.createElement("div");
+          cost.className="badge badge-success badge-pill";
+          cost.id = cart.name + "_cost";
+          cost.innerHTML="&#x20B9;"+cart.cost;
+          cost.style.margin="2px"
+          
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "close";
+          button.setAttribute("aria-label", "Close");
+          button.setAttribute('onclick','delete_item("'+cart.name+'")');
 
-        var cost = document.createElement("div");
-        cost.className="badge badge-success badge-pill";
-        cost.id = cart.name + "_cost";
-        cost.innerHTML="&#x20B9;"+cart.cost;
-        cost.style.margin="2px"
-        
-        var button = document.createElement("button");
-        button.type = "button";
-        button.className = "close";
-        button.setAttribute("aria-label", "Close");
-        button.setAttribute('onclick','delete_item("'+cart.name+'")');
+          var span = document.createElement("span");
+          span.setAttribute("aria-hidden","true");
+          span.innerHTML="&times;";
 
-        var span = document.createElement("span");
-        span.setAttribute("aria-hidden","true");
-        span.innerHTML="&times;";
+          button.appendChild(span);
 
-        button.appendChild(span);
+          li.appendChild(name);
+          li.appendChild(quantity);
+          li.appendChild(cost);
+          li.appendChild(button);
 
-        li.appendChild(name);
-        li.appendChild(quantity);
-        li.appendChild(cost);
-        li.appendChild(button);
+          cart_items.appendChild(li);
+        }
+        else{
+          var quantity = document.getElementById(cart.name+"_quantity");
+          quantity.innerHTML=cart.quantity+cart.quantityType;
 
-        cart_items.appendChild(li);
+          var cost = document.getElementById(cart.name+"_cost");
+          cost.innerHTML="&#x20B9;"+cart.cost;
+        }
     }
 
     function delete_item(item_name){
         var li = document.getElementById(item_name+"_inlist");
+
         li.remove();
-        for(var j=0;list.length;j++){
+        for(var j=0;j<list.length;j++){
             if(list[j].name == item_name){
-              list.splice(j,1);
               break;
             }
         }
-        
+
+        totalPrice = totalPrice - list[j].cost;
+        list.splice(j,1);
+        document.getElementById("number-of-items").innerHTML=list.length;
+        document.getElementById("total-price").innerHTML=totalPrice;
+
+        if(list.length==0){
+          document.getElementById("list").style.display="none";
+          document.getElementById("list-total").style.display="none";
+          document.getElementById("list-submit").style.display="none";
+          document.getElementById("cart-nothing").className="d-flex align-items-center justify-content-center";
+        }
     }
 
     function add_btn(name,quantityType){
         const btn = document.getElementById('add_new_item_btn');
 
+        btn.click();
+
         var quantity_type = document.getElementById("quantity_type");
         quantity_type.innerHTML="."+quantityType;
 
-        btn.click();
         current = name;
     }
 
