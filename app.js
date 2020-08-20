@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 var new_con = mysql.createPool({
   host: "192.168.64.2",
   user: "naijith",
@@ -104,6 +104,7 @@ app.get("/delete_item/:name/:imageType" ,(req,res)=>{
 
 app.post("/new_order" , (req,res)=>{
   lists.push(req.body.list);
+  io.emit('message', req.body.list);
   console.log("new order submitted");
 });
 

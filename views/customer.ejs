@@ -109,9 +109,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io();
-    socket.on('message', "new_message")
-
     var list=[];
     var current = null;
     var totalItems=0,totalPrice=0;
@@ -267,8 +264,8 @@
           list[i].quantity=document.getElementById(list[i].name+'_quantity').innerHTML;
       }
       postData('/new_order', { 'list':list })
-        .then(data => {
-          console.log(data);
+        .then(list => {
+          console.log(list);
         });
       list=[];
       document.getElementById("cart_items").innerHTML="";

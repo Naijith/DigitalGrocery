@@ -37,7 +37,7 @@
     </div>
   </nav>
   <div id="container">
-    <div class="card-columns p-3">
+    <div id="cards" class="card-columns p-3">
       <% for(var i=0;i<lists.length;i++){ 
         var total=0 %>
       <div id="<%=i%>" class="card">
@@ -66,6 +66,75 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    var socket = io()
+    socket.on('message', new_message)
+    function new_message(list){
+        update_lists(list)
+    }
+
+    function update_lists(list){
+      var div_length = document.getElementsByClassName("card").length;
+      var div = document.createElement('div');
+      div.id=div_length;
+      div.className="card";
+
+      var div_body = document.createElement('div');
+      div_body.className = 'card-body';
+
+      var h5 = document.createElement("h5");
+      h5.className = "card-title  text-center";
+      h5.innerHTML = 'Customer'+div_length;
+      
+      var ul = document.createElement('ul');
+      ul.className = "list-group";
+      
+      var total=0;
+      var a;
+      var span1;var span2;var span3;var span4;
+      for(var k=0;k<list.length;k++){
+        total = total + list[k].cost
+        a = document.createElement("a");
+        a.id = k;
+        a.className = "list-group-item p-0 d-flex justify-content-between"
+        a.setAttribute('onclick',"cross_out(this)");
+
+        span1 = document.createElement('span');
+        span1.innerHTML =list[k].name;
+
+        span2 = document.createElement('span');
+        span2.innerHTML =list[k].quantity;
+
+        span3 = document.createElement('span');
+        span3.appendChild(span1);
+        span3.appendChild(span2);
+        span3.className = "p-2 name";
+
+        span4 = document.createElement('span');
+        span4.innerHTML = "&#x20B9;"+list[k].cost;
+        span4.className = "p-2 cost";
+
+        a.appendChild(span3);
+        a.appendChild(span4);
+
+        ul.appendChild(a);
+
+      }
+
+      var li = document.createElement('li');
+      li.className="list-group-item-primary p-3 d-flex justify-content-between";
+      li.innerHTML='<span>Total:</span><span>&#x20B9;'+total+'</span>';
+      
+      ul.appendChild(li);
+
+      div_body.appendChild(h5);
+      div_body.appendChild(ul);
+      div.appendChild(div_body);
+
+      div_cards = document.getElementById("cards");
+      div_cards.appendChild(div);
+      
+    }
+
     function cross_out(clickedElement){
         c = clickedElement.children;
         if(c[0].style.textDecoration==''){
