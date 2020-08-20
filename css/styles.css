@@ -3,6 +3,32 @@ html,body{
     overflow: hidden;
 }
 
+#background{
+    width:100%;
+    height: 100%;
+    object-fit: cover; 
+    position: fixed;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.form-inline{
+    position: absolute;
+    top: 15px;
+    right: 78px;
+}
+@media (min-width: 992px){
+    .form-inline{
+        right:15px;
+    }
+}
+
+.navbar-toggler{
+    position: absolute;
+    top:14px;
+    right: 15px;
+}
+
 p{
     text-decoration: overline;
     font-variant-caps: petite-caps;
@@ -43,6 +69,7 @@ p{
     text-align: center;
     background-color: #6161613d;
     font-size:25px;
+    font-style: oblique;
     font-variant-caps: all-petite-caps;
     overflow: hidden;
 }
@@ -62,8 +89,7 @@ p{
   }
 
 #list-total{
-    background-color:#d3d3d361;
-    border: 1px solid grey;
+    background-color:lightgray;
     border-radius:0px 0px 5px 5px;
     width: 96%;
     max-width: 400px;
@@ -87,14 +113,14 @@ p{
     display: none;
 }
 
-#delete_icon{
-    font-size: 24px;
+.delete_icon{
+    font-size: 23px;
     position: absolute;
     right: 15px;
-    top: .75rem;
+    top: 8px;
     color: grey;
     text-decoration: none;
 }
-#delete_icon:hover{
+.delete_icon:hover{
     color:red;
 }

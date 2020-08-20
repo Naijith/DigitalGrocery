@@ -1,0 +1,69 @@
+html,body{
+    overflow: hidden;
+}
+#background{
+    width:100%;
+    height: 100%;
+    object-fit: cover; 
+    position: fixed;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.form-inline{
+    position: absolute;
+    top: 15px;
+    right: 78px;
+}
+@media (min-width: 992px){
+    .form-inline{
+        right:15px;
+    }
+}
+@media (max-width: 1300px){
+    .card-columns {
+          column-count: 2;
+      }
+}
+
+.navbar-toggler{
+    position: absolute;
+    top:14px;
+    right: 15px;
+}
+
+#container{
+    width:100%;
+     padding-top: 68px;
+     padding-bottom: 56px;
+     position: fixed;
+     height: 100%;
+     overflow:scroll;
+}
+
+.list-group-item{
+    font-size:25px;
+    font-variant-caps: all-petite-caps;
+}
+
+a{
+    cursor: default;
+}
+
+.delete_icon{
+    font-size: 22px;
+    position: absolute;
+    right: 21px;
+    top: 15px;
+    color: grey;
+    text-decoration: none;
+}
+.name{
+    display: flex;
+    width: 75%;
+    justify-content: space-between;
+}
+.cost{
+    width:25%;
+    text-align: center;
+}

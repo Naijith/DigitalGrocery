@@ -11,26 +11,27 @@
 <body>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" style="border: 1px solid white;border-radius: 8px;padding: 10px;" href="#">Digital Grocery</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
           <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Customer Lists</a>
+          <a class="nav-link" href="./lists">Customer Lists</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" onclick="add_btn()">New Item</a>
-          </li>
+          <a class="nav-link" onclick="add_btn()">New Item</a>
+        </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" oninput="filter_menu()">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="filter_menu">Search</button>
-      </form>
     </div>
+    <form class="form-inline">
+      <input id="filter_text" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" oninput="filter_menu()">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="filter_menu()">Search</button>
+      <button onclick="window.location.href='./admin'" class="btn btn-outline-primary my-2 my-sm-0 ml-2" type="button">login</button>
+    </form>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
   </nav>
   <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">© 2020 Copyright: Digital Grocery</a>
@@ -50,7 +51,7 @@
           <div id="<%=items[i].name+'_price'%>" style="position: absolute;top: .75rem;right: 3rem;">
             &#x20B9;<%=items[i].price%>
           </div>
-          <a id="delete_icon" class="fa fa-trash-o" href="./delete_item/<%=items[i].name%>/<%=items[i].imageType%>"></a>
+          <a class="delete_icon" href="./delete_item/<%=items[i].name%>/<%=items[i].imageType%>"><span class="fa fa-trash-o"></span></a>
         </div>
 		<div class="card border-0 rounded-0 justify-content-between align-items-center" style="background-image: url(<%=url%>);background-repeat: no-repeat;background-position: center;background-size: cover;height: 100%">
     </div>
@@ -118,7 +119,7 @@
     }
 
     function filter_menu(){
-      var filter_text = document.getElementById("filter_text").value;
+      var filter_text = document.getElementById("filter_text").value.toLowerCase();
 
       var cards = document.getElementById('menu').getElementsByClassName('card');
       for( i=0; i< cards.length; i+=2)
