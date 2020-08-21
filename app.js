@@ -16,7 +16,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4040;
 var new_con = mysql.createPool({
   host: "192.168.64.2",
   user: "naijith",
@@ -109,16 +109,16 @@ app.post("/new_order" , (req,res)=>{
 });
 
 app.get("/lists",(req,res)=>{
-  res.render("lists.ejs",{lists:lists});
+  console.log("ur app");
 });
 
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
-// app.use(function(err, req, res, next) {
-//   res.json(err.message);
-//   res.render('error.ejs');
-// });
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+app.use(function(err, req, res, next) {
+  res.json(err.message);
+  res.render('error.ejs');
+});
 
 http.listen(PORT,() => console.log(`Server up on port ${PORT}`));
 
