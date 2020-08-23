@@ -1,3 +1,4 @@
+require('dotenv').config();
 var express = require("express");
 var app = express();
 var bodyparser = require("body-parser");
@@ -9,6 +10,7 @@ var mysql = require('mysql2/promise');
 var path = require('path');
 var createError = require('http-errors');
 const { createSecretKey } = require("crypto");
+var ngrok = require('ngrok');
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -72,7 +74,7 @@ app.post("/add_item" , (req,res)=>{
 
     fs.rename(oldpath, newpath, function (err) {
         if (err) throw err;
-        console.log("success");
+        console.log("new item added");
     });
 
     new_con.query("INSERT INTO items (id,name,imageType,price,quantityType) VALUES (?,?,?,?,?)",[null,name,imageType,price,quantityType], function(err,result){
@@ -109,7 +111,7 @@ app.post("/new_order" , (req,res)=>{
 });
 
 app.get("/lists",(req,res)=>{
-  console.log("ur app");
+  res.render("lists.ejs",{lists:lists});
 });
 
 app.use(function(req, res, next) {
@@ -120,6 +122,20 @@ app.use(function(err, req, res, next) {
   res.render('error.ejs');
 });
 
-http.listen(PORT,() => console.log(`Server up on port ${PORT}`));
+http.listen(PORT,() => {
+  console.log(`Server up on port ${PORT}`);
+  // (async function(){
+  //   const oninternet = await ngrok.connect(PORT);
+  //   console.log(`on internet:${oninternet} _________${PORT}`);
+  // })()
+});
+
+// app.listen(PORT,()=>{
+//   console.log(`Server up on port ${PORT}`);
+//   (async function(){
+//     const oninternet = await ngrok.connect(PORT);
+//     console.log(`on internet:${oninternet} _________${PORT}`);
+//   })()
+// });
 
 module.exports=app;
